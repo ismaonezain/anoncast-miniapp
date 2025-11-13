@@ -1,0 +1,28 @@
+{
+  "manifest_version": 1,
+  "name": "AnonCast MiniApp",
+  "slug": "anoncast-miniapp",
+  "version": "0.1.0",
+  "description": "Submit anonymous confessions to AnonCast (moderated).",
+  "author": {
+    "name": "AnonCast",
+    "url": "https://your-domain.example"
+  },
+  "icons": {
+    "48": "https://your-domain.example/icon-48.png",
+    "128": "https://your-domain.example/icon-128.png"
+  },
+  "entry": {
+    "url": "https://your-domain.example/miniapp/index.html"
+  },
+  "permissions": [
+    "SHOW_TOAST",
+    "OPEN_URL",
+    "GET_WALLET_ADDRESS"
+  ],
+  "privacy": {
+    "collects_personal_data": false,
+    "data_retention_days": 30
+  },
+  "disableNativeGestures": true
+}

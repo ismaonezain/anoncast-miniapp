@@ -1,4 +1,3 @@
-```markdown
 # AnonCast Mini App — Scaffold
 
 Ringkasan:
@@ -39,6 +38,6 @@ Catatan penting:
 Jika mau, aku bisa:
 - A. Tambah fitur admin UI (non-kode spec atau simple page).
 - B. Tambah server logic untuk upload images ke Supabase Storage.
-- C. Implementasi server-side Farcaster post function (I will show exact code but will NOT run private key — you run locally)
+- C. Implementasi server-side Farcaster post function (I will show exact code but will NOT run private key — you run locally)  
+
 Pilih A/B/C atau bilang “lanjutkan deploy” dan aku bantu langkah berikutnya.
-```

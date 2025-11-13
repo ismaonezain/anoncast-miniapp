@@ -1,15 +1,17 @@
 /**
- * Simple Express server:
- * - serves static files from ../public at /miniapp
- * - provides POST /api/confessions (basic moderation stub)
- *
- * For production: replace stub with real moderation, storage, DB, and Farcaster posting.
+ * server/index.js
+ * Updated to serve:
+ *  - static files at root (public/)
+ *  - /miniapp (legacy)
+ *  - /manifest.json (serves manifest.json from repo root)
+ *  - redirect / -> /miniapp/index.html
  */
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import fs from 'fs/promises'
 
 dotenv.config()
 const app = express()
@@ -19,10 +21,33 @@ app.use(express.json())
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 30 })
 app.use('/api/confessions', limiter)
 
-// Serve static miniapp under /miniapp
+// Serve static files from /public at the site root
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-app.use('/miniapp', express.static(path.join(__dirname, '..', 'public')))
+const PUBLIC_DIR = path.join(__dirname, '..', 'public')
+app.use(express.static(PUBLIC_DIR))
+
+// Also keep /miniapp path working (legacy)
+app.use('/miniapp', express.static(PUBLIC_DIR))
+
+// Serve manifest.json from project root so Farcaster can fetch it at /manifest.json
+app.get('/manifest.json', async (req, res) => {
+  try {
+    const manifestPath = path.join(__dirname, '..', 'manifest.json')
+    const data = await fs.readFile(manifestPath, 'utf8')
+    // manifest.json should be valid JSON; serve with correct content-type
+    res.setHeader('Content-Type', 'application/json')
+    return res.send(data)
+  } catch (err) {
+    console.error('Error reading manifest.json', err)
+    return res.status(404).send({ error: 'manifest not found' })
+  }
+})
+
+// Optional: redirect root to miniapp entry
+app.get('/', (req, res) => {
+  res.redirect('/miniapp/index.html')
+})
 
 // Basic blocklist & moderation stub
 const BLOCKLIST = ['doxtag', 'illegal-term']
